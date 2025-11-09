@@ -1,0 +1,289 @@
+{
+    "config": {
+        "defaults": [
+            "url",
+            "username",
+            "password"
+        ],
+        "variables": {
+            "insecure": {
+                "description": "Allow insecure HTTPS client. This can also be set as the ACI_INSECURE environment variable. Defaults to true.",
+                "type": "boolean"
+            },
+            "logging": {
+                "description": "Enable debug logging. This can also be set as the ACI_LOGGING environment variable. Defaults to false.",
+                "type": "boolean"
+            },
+            "password": {
+                "default": "",
+                "defaultInfo": {
+                    "environment": [
+                        "ACI_PASSWORD"
+                    ]
+                },
+                "description": "Password for the APIC Account. This can also be set as the ACI_PASSWORD environment variable.",
+                "secret": true,
+                "type": "string"
+            },
+            "retries": {
+                "description": "Number of retries for REST API calls. This can also be set as the ACI_RETRIES environment variable. Defaults to 3.",
+                "type": "integer"
+            },
+            "url": {
+                "default": "",
+                "defaultInfo": {
+                    "environment": [
+                        "ACI_URL"
+                    ]
+                },
+                "description": "URL of the Cisco APIC web interface. This can also be set as the ACI_URL environment variable.",
+                "type": "string"
+            },
+            "username": {
+                "default": "",
+                "defaultInfo": {
+                    "environment": [
+                        "ACI_USERNAME"
+                    ]
+                },
+                "description": "Username for the APIC Account. This can also be set as the ACI_USERNAME environment variable.",
+                "type": "string"
+            }
+        }
+    },
+    "description": "The Pulumi ACI provider provides resources to interact with a Cisco ACI fabric.",
+    "displayName": "ACI",
+    "homepage": "https://pulumi.com",
+    "keywords": [
+        "pulumi",
+        "aci",
+        "networking",
+        "cisco"
+    ],
+    "language": {
+        "csharp": {
+            "packageReferences": {
+                "Pulumi": "3.*"
+            }
+        },
+        "go": {
+            "generateResourceContainerTypes": true,
+            "importBasePath": "github.com/netascode/pulumi-aci/sdk/go/aci"
+        },
+        "java": {
+            "buildFiles": "gradle",
+            "dependencies": {
+                "com.google.code.findbugs:jsr305": "3.0.2",
+                "com.google.code.gson:gson": "2.8.9",
+                "com.pulumi:pulumi": "0.6.0"
+            },
+            "gradleNexusPublishPluginVersion": "1.1.0"
+        },
+        "nodejs": {
+            "dependencies": {
+                "@pulumi/pulumi": "^3.0.0"
+            },
+            "packageName": "@netascode/aci"
+        },
+        "python": {
+            "requires": {
+                "pulumi": ">=3.0.0,<4.0.0"
+            }
+        }
+    },
+    "license": "MPL-2.0",
+    "logoUrl": "https://raw.githubusercontent.com/netascode/pulumi-aci/master/assets/logo.png",
+    "name": "aci",
+    "pluginDownloadURL": "github://api.github.com/netascode",
+    "provider": {
+        "inputProperties": {
+            "insecure": {
+                "description": "Allow insecure HTTPS client. This can also be set as the ACI_INSECURE environment variable. Defaults to true.",
+                "type": "boolean"
+            },
+            "logging": {
+                "description": "Enable debug logging. This can also be set as the ACI_LOGGING environment variable. Defaults to false.",
+                "type": "boolean"
+            },
+            "password": {
+                "default": "",
+                "defaultInfo": {
+                    "environment": [
+                        "ACI_PASSWORD"
+                    ]
+                },
+                "description": "Password for the APIC Account. This can also be set as the ACI_PASSWORD environment variable.",
+                "secret": true,
+                "type": "string"
+            },
+            "retries": {
+                "description": "Number of retries for REST API calls. This can also be set as the ACI_RETRIES environment variable. Defaults to 3.",
+                "type": "integer"
+            },
+            "url": {
+                "default": "",
+                "defaultInfo": {
+                    "environment": [
+                        "ACI_URL"
+                    ]
+                },
+                "description": "URL of the Cisco APIC web interface. This can also be set as the ACI_URL environment variable.",
+                "type": "string"
+            },
+            "username": {
+                "default": "",
+                "defaultInfo": {
+                    "environment": [
+                        "ACI_USERNAME"
+                    ]
+                },
+                "description": "Username for the APIC Account. This can also be set as the ACI_USERNAME environment variable.",
+                "type": "string"
+            }
+        },
+        "properties": {
+            "insecure": {
+                "description": "Allow insecure HTTPS client. This can also be set as the ACI_INSECURE environment variable. Defaults to true.",
+                "type": "boolean"
+            },
+            "logging": {
+                "description": "Enable debug logging. This can also be set as the ACI_LOGGING environment variable. Defaults to false.",
+                "type": "boolean"
+            },
+            "password": {
+                "default": "",
+                "defaultInfo": {
+                    "environment": [
+                        "ACI_PASSWORD"
+                    ]
+                },
+                "description": "Password for the APIC Account. This can also be set as the ACI_PASSWORD environment variable.",
+                "secret": true,
+                "type": "string"
+            },
+            "retries": {
+                "description": "Number of retries for REST API calls. This can also be set as the ACI_RETRIES environment variable. Defaults to 3.",
+                "type": "integer"
+            },
+            "url": {
+                "default": "",
+                "defaultInfo": {
+                    "environment": [
+                        "ACI_URL"
+                    ]
+                },
+                "description": "URL of the Cisco APIC web interface. This can also be set as the ACI_URL environment variable.",
+                "type": "string"
+            },
+            "username": {
+                "default": "",
+                "defaultInfo": {
+                    "environment": [
+                        "ACI_USERNAME"
+                    ]
+                },
+                "description": "Username for the APIC Account. This can also be set as the ACI_USERNAME environment variable.",
+                "type": "string"
+            }
+        },
+        "required": [
+            "url",
+            "username",
+            "password"
+        ],
+        "requiredInputs": [
+            "url",
+            "username",
+            "password"
+        ]
+    },
+    "publisher": "Cisco",
+    "repository": "https://github.com/netascode/pulumi-aci",
+    "resources": {
+        "aci:apic:Rest": {
+            "description": "Manages ACI Model Objects via REST API calls. This resource can only manage a single API object.",
+            "inputProperties": {
+                "children": {
+                    "description": "List of child objects to be created. Each child object must have a unique relative name.",
+                    "items": {
+                        "$ref": "#/types/aci:apic:Child"
+                    },
+                    "type": "array"
+                },
+                "class_name": {
+                    "description": "Which class object is being created. (Make sure there is no colon in the classname)",
+                    "type": "string"
+                },
+                "content": {
+                    "additionalProperties": {
+                        "type": "string"
+                    },
+                    "description": "Map of key-value pairs those needed to be passed to the Model object as parameters. Make sure the key name matches the name with the object parameter in ACI.",
+                    "type": "object"
+                },
+                "dn": {
+                    "description": "Distinguished name of object being managed including its relative name, e.g. uni/tn-EXAMPLE_TENANT.",
+                    "type": "string"
+                }
+            },
+            "properties": {
+                "children": {
+                    "description": "List of child objects to be created. Each child object must have a unique relative name.",
+                    "items": {
+                        "$ref": "#/types/aci:apic:Child"
+                    },
+                    "type": "array"
+                },
+                "class_name": {
+                    "description": "Which class object is being created. (Make sure there is no colon in the classname)",
+                    "type": "string"
+                },
+                "content": {
+                    "additionalProperties": {
+                        "type": "string"
+                    },
+                    "description": "Map of key-value pairs those needed to be passed to the Model object as parameters. Make sure the key name matches the name with the object parameter in ACI.",
+                    "type": "object"
+                },
+                "dn": {
+                    "description": "Distinguished name of object being managed including its relative name, e.g. uni/tn-EXAMPLE_TENANT.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "dn",
+                "class_name"
+            ],
+            "requiredInputs": [
+                "dn",
+                "class_name"
+            ]
+        }
+    },
+    "types": {
+        "aci:apic:Child": {
+            "properties": {
+                "class_name": {
+                    "description": "Which class object is being created. (Make sure there is no colon in the classname)",
+                    "type": "string"
+                },
+                "content": {
+                    "additionalProperties": {
+                        "type": "string"
+                    },
+                    "description": "Map of key-value pairs those needed to be passed to the Model object as parameters. Make sure the key name matches the name with the object parameter in ACI.",
+                    "type": "object"
+                },
+                "rn": {
+                    "description": "Relative name of child object.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "rn",
+                "class_name"
+            ],
+            "type": "object"
+        }
+    }
+}
