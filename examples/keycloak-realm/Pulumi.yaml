@@ -1,0 +1,3 @@
+name: keycloak-realm
+runtime: nodejs
+description: Example using the Pulumi Qeycloak provider to create a Keycloak realm

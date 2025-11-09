@@ -12,7 +12,8 @@ VERSION         ?= $(shell pulumictl get version)
 PROVIDER_PATH   := provider
 VERSION_PATH    := ${PROVIDER_PATH}/pkg/version.Version
 
-SCHEMA_FILE     := provider/cmd/pulumi-resource-${PACK}/schema.json
+# Deprecated: schema.json no longer used; SDKs are generated from the provider binary
+# SCHEMA_FILE     := provider/cmd/pulumi-resource-${PACK}/schema.json
 GOPATH          := $(shell go env GOPATH)
 
 WORKING_DIR     := $(shell pwd)
@@ -23,10 +24,11 @@ ensure::
 	cd sdk && go mod tidy
 	cd examples && go mod tidy
 
-codegen::
-	(cd provider && VERSION=${VERSION} go generate cmd/${PROVIDER}/main.go)
-	(cd provider && go build -o $(WORKING_DIR)/bin/${CODEGEN} -ldflags "-X ${PROJECT}/${VERSION_PATH}=${VERSION}" ${PROJECT}/${PROVIDER_PATH}/cmd/$(CODEGEN))
-	$(WORKING_DIR)/bin/${CODEGEN} $(SCHEMA_FILE) --version ${VERSION} 
+# Deprecated: no separate codegen step; schema is served by the provider binary
+# codegen::
+# 	(cd provider && VERSION=${VERSION} go generate cmd/${PROVIDER}/main.go)
+# 	(cd provider && go build -o $(WORKING_DIR)/bin/${CODEGEN} -ldflags "-X ${PROJECT}/${VERSION_PATH}=${VERSION}" ${PROJECT}/${PROVIDER_PATH}/cmd/$(CODEGEN))
+# 	$(WORKING_DIR)/bin/${CODEGEN} $(SCHEMA_FILE) --version ${VERSION} 
 
 provider::
 	(cd provider && go build -o $(WORKING_DIR)/bin/${PROVIDER} -ldflags "-X ${PROJECT}/${VERSION_PATH}=${VERSION}" $(PROJECT)/${PROVIDER_PATH}/cmd/$(PROVIDER))
@@ -41,25 +43,43 @@ test_provider::
 nodejs_sdk:: VERSION := $(shell pulumictl get version --language javascript)
 nodejs_sdk::
 	rm -rf sdk/nodejs
-	pulumi package gen-sdk --language nodejs $(SCHEMA_FILE)
+	pulumi package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language nodejs
 	cd ${PACKDIR}/nodejs/ && \
-		yarn install && \
-		yarn run tsc
-	cp README.md LICENSE ${PACKDIR}/nodejs/package.json ${PACKDIR}/nodejs/yarn.lock ${PACKDIR}/nodejs/bin/
+		npm install && \
+		npm run build
+	cp README.md ${PACKDIR}/nodejs/bin/
+	@if [ -f LICENSE ]; then cp LICENSE ${PACKDIR}/nodejs/bin/; fi
+	cp ${PACKDIR}/nodejs/package.json ${PACKDIR}/nodejs/bin/
+	@if [ -f ${PACKDIR}/nodejs/package-lock.json ]; then cp ${PACKDIR}/nodejs/package-lock.json ${PACKDIR}/nodejs/bin/; fi
 	sed -i.bak 's/$${VERSION}/$(VERSION)/g' ${PACKDIR}/nodejs/bin/package.json
 
 java_sdk:: PACKAGE_VERSION := $(shell pulumictl get version --language generic)
 java_sdk::
 	rm -rf sdk/java
-	pulumi package gen-sdk --language java $(SCHEMA_FILE)
-	cd sdk/java/ && \
-		gradle --console=plain build
+	pulumi package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language java
+	# Copy Maven POM template to the generated SDK
+	cp assets/java/pom.xml sdk/java/pom.xml
+	# Attempt Maven build if mvn exists; otherwise fall back to Gradle if available.
+	@if [ -f sdk/java/pom.xml ]; then \
+		if command -v mvn >/dev/null 2>&1; then \
+			cd sdk/java && mvn -q -Dproject.version=$(PACKAGE_VERSION) package; \
+		else \
+			echo "Maven not found, skipping Maven build"; \
+		fi; \
+	fi
+	@if [ -f sdk/java/build.gradle ]; then \
+		if command -v gradle >/dev/null 2>&1; then \
+			cd sdk/java && gradle --console=plain build; \
+		else \
+			echo "Gradle not found, skipped Gradle build"; \
+		fi; \
+	fi
 
 .PHONY: build
 build:: provider build_sdks
 
 .PHONY: build_sdks
-build_sdks: codegen nodejs_sdk java_sdk
+build_sdks: nodejs_sdk java_sdk
 
 # Required for the codegen action that runs in pulumi/pulumi
 only_build:: build
@@ -81,8 +101,8 @@ test_all::
 	cd tests/sdk/nodejs && $(GO_TEST) ./...
 
 install_nodejs_sdk::
-	-yarn unlink --cwd $(WORKING_DIR)/sdk/nodejs/bin
-	yarn link --cwd $(WORKING_DIR)/sdk/nodejs/bin
+	- npm unlink -g ${NODE_MODULE_NAME} 2>/dev/null || true
+	cd $(WORKING_DIR)/sdk/nodejs/bin && npm link
 
 test::
 	cd examples && go test -v -tags=all -timeout 2h

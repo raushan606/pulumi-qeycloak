@@ -1,0 +1,29 @@
+{
+    "name": "@raushan606/qeycloak",
+    "version": "${VERSION}",
+    "keywords": [
+        "pulumi",
+        "keycloak",
+        "realm",
+        "qeycloak",
+        "kind/native"
+    ],
+    "homepage": "https://pulumi.com",
+    "repository": "https://github.com/raushan606/pulumi-qeycloak",
+    "license": "Apache-2.0",
+    "scripts": {
+        "build": "tsc"
+    },
+    "dependencies": {
+        "@pulumi/pulumi": "^3.0.0"
+    },
+    "devDependencies": {
+        "@types/node": "^18",
+        "typescript": "^4.3.5"
+    },
+    "pulumi": {
+        "resource": true,
+        "name": "qeycloak",
+        "server": "github://api.github.com/raushan606"
+    }
+}

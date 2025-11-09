@@ -1,6 +1,0 @@
-name: simple
-runtime: 
-  name: python
-  options:
-    virtualenv: venv
-description: A simple aci example

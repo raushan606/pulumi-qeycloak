@@ -14,7 +14,7 @@ var Version string
 
 const Name string = "qeycloak"
 
-func NewProvider() p.Provider {
+func Provider() p.Provider {
 	return infer.Provider(infer.Options{
 		Resources: []infer.InferredResource{
 			infer.Resource(&realm.Realm{}),
@@ -49,8 +49,7 @@ func NewProvider() p.Provider {
 					},
 				},
 				"java": map[string]any{
-					"buildFiles":                      "gradle",
-					"gradleNexusPublishPluginVersion": "1.1.0",
+					"buildFiles": "maven",
 					"dependencies": map[string]any{
 						"com.pulumi:pulumi":               "1.16.3",
 						"com.google.code.gson:gson":       "2.13.2",

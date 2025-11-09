@@ -2,10 +2,12 @@ package realm
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/Nerzal/gocloak/v13"
+	p "github.com/pulumi/pulumi-go-provider"
 	"github.com/pulumi/pulumi-go-provider/infer"
-	"github.com/raushan606/pulumi-qeycloak/provider/pkg/qeycloak/config"
+	cfg "github.com/raushan606/pulumi-qeycloak/provider/pkg/qeycloak/config"
 )
 
 type Realm struct{}
@@ -33,11 +35,21 @@ type RealmState struct {
 	EmailTheme      *string `pulumi:"emailTheme,optional"`
 }
 
-func getClientToken(ctx context.Context) (client *gocloak.GoCloak, token *gocloak.Token) {
-	config := infer.GetConfig[config.KeycloakConfig](ctx)
-	client = config.Client
-	token, err := client.LoginAdmin(ctx, config.AdminUsername, config.AdminPassword, config.Realm)
-	return config.Client, token
+// getClientToken logs in using the configured admin credentials and returns the client & JWT.
+func getClientToken(ctx context.Context) (*gocloak.GoCloak, *gocloak.JWT, error) {
+	c := infer.GetConfig[cfg.KeycloakConfig](ctx)
+	if c.Client == nil {
+		return nil, nil, fmt.Errorf("keycloak client not configured")
+	}
+	realm := "master"
+	if c.Realm != nil && *c.Realm != "" {
+		realm = *c.Realm
+	}
+	jwt, err := c.Client.LoginAdmin(ctx, c.Username, c.Password, realm) // returns *gocloak.JWT
+	if err != nil {
+		return nil, nil, fmt.Errorf("admin login failed: %w", err)
+	}
+	return c.Client, jwt, nil
 }
 
 func (*Realm) Create(ctx context.Context, req infer.CreateRequest[RealmArgs]) (infer.CreateResponse[RealmState], error) {
@@ -57,19 +69,22 @@ func (*Realm) Create(ctx context.Context, req infer.CreateRequest[RealmArgs]) (i
 		}, nil
 	}
 
-	client, token := getClientToken(ctx)
-	realm := gocloak.RealmRepresentation{
+	client, token, err := getClientToken(ctx)
+	if err != nil {
+		return infer.CreateResponse[RealmState]{}, err
+	}
+	rr := gocloak.RealmRepresentation{
 		Realm:           &req.Inputs.Name,
 		Enabled:         req.Inputs.Enabled,
 		DisplayName:     req.Inputs.DisplayName,
-		DisplayNameHtml: req.Inputs.DisplayNameHtml,
+		DisplayNameHTML: req.Inputs.DisplayNameHtml, // map Html -> HTML
 		LoginTheme:      req.Inputs.LoginTheme,
 		AccountTheme:    req.Inputs.AccountTheme,
 		AdminTheme:      req.Inputs.AdminTheme,
 		EmailTheme:      req.Inputs.EmailTheme,
 	}
 
-	resp, err := client.CreateRealm(ctx, token.AccessToken, realm)
+	resp, err := client.CreateRealm(ctx, token.AccessToken, rr)
 	if err != nil {
 		return infer.CreateResponse[RealmState]{}, err
 	}
@@ -85,9 +100,9 @@ func (*Realm) Create(ctx context.Context, req infer.CreateRequest[RealmArgs]) (i
 		ID: resp,
 		Output: RealmState{
 			ID:              resp,
-			Name:            currentRealm.Realm,
+			Name:            deref(currentRealm.Realm),
 			DisplayName:     currentRealm.DisplayName,
-			DisplayNameHtml: currentRealm.DisplayNameHtml,
+			DisplayNameHtml: currentRealm.DisplayNameHTML,
 			Enabled:         currentRealm.Enabled,
 			LoginTheme:      currentRealm.LoginTheme,
 			AccountTheme:    currentRealm.AccountTheme,
@@ -113,19 +128,22 @@ func (r *Realm) Update(ctx context.Context, req infer.UpdateRequest[RealmArgs, R
 		}, nil
 	}
 
-	client, token := getClientToken(ctx)
-	realm := gocloak.RealmRepresentation{
+	client, token, err := getClientToken(ctx)
+	if err != nil {
+		return infer.UpdateResponse[RealmState]{}, err
+	}
+	rr := gocloak.RealmRepresentation{
 		Realm:           &req.Inputs.Name,
 		Enabled:         req.Inputs.Enabled,
 		DisplayName:     req.Inputs.DisplayName,
-		DisplayNameHtml: req.Inputs.DisplayNameHtml,
+		DisplayNameHTML: req.Inputs.DisplayNameHtml,
 		LoginTheme:      req.Inputs.LoginTheme,
 		AccountTheme:    req.Inputs.AccountTheme,
 		AdminTheme:      req.Inputs.AdminTheme,
 		EmailTheme:      req.Inputs.EmailTheme,
 	}
 
-	err := client.UpdateRealm(ctx, token.AccessToken, realm)
+	err = client.UpdateRealm(ctx, token.AccessToken, rr)
 	if err != nil {
 		return infer.UpdateResponse[RealmState]{}, err
 	}
@@ -140,9 +158,9 @@ func (r *Realm) Update(ctx context.Context, req infer.UpdateRequest[RealmArgs, R
 	return infer.UpdateResponse[RealmState]{
 		Output: RealmState{
 			ID:              req.ID,
-			Name:            currentRealm.Realm,
+			Name:            deref(currentRealm.Realm),
 			DisplayName:     currentRealm.DisplayName,
-			DisplayNameHtml: currentRealm.DisplayNameHtml,
+			DisplayNameHtml: currentRealm.DisplayNameHTML,
 			Enabled:         currentRealm.Enabled,
 			LoginTheme:      currentRealm.LoginTheme,
 			AccountTheme:    currentRealm.AccountTheme,
@@ -154,47 +172,100 @@ func (r *Realm) Update(ctx context.Context, req infer.UpdateRequest[RealmArgs, R
 
 func (r *Realm) Read(ctx context.Context, req infer.ReadRequest[RealmArgs, RealmState]) (infer.ReadResponse[RealmArgs, RealmState], error) {
 
-	client, token := getClientToken(ctx)
-	currentRealm, err := client.GetRealm(ctx, token.AccessToken, req.ID)
+	client, token, err := getClientToken(ctx)
+	if err != nil {
+		return infer.ReadResponse[RealmArgs, RealmState]{}, err
+	}
+	currentRealm, err := readRealmState(ctx, client, token.AccessToken, req.ID)
 	if err != nil {
 		return infer.ReadResponse[RealmArgs, RealmState]{}, err
 	}
 	p.GetLogger(ctx).Info("Realm read with ID: " + req.ID)
 
 	return infer.ReadResponse[RealmArgs, RealmState]{
-		Output: RealmState{
-			ID:              req.ID,
-			Name:            currentRealm.Realm,
-			DisplayName:     currentRealm.DisplayName,
-			DisplayNameHtml: currentRealm.DisplayNameHtml,
-			Enabled:         currentRealm.Enabled,
-			LoginTheme:      currentRealm.LoginTheme,
-			AccountTheme:    currentRealm.AccountTheme,
-			AdminTheme:      currentRealm.AdminTheme,
-			EmailTheme:      currentRealm.EmailTheme,
-		},
+		ID:     currentRealm.ID,
+		Inputs: RealmArgs{
+			Name:            req.Inputs.Name,
+			DisplayName:     req.Inputs.DisplayName,
+			DisplayNameHtml: req.Inputs.DisplayNameHtml,
+			Enabled:         req.Inputs.Enabled,
+			LoginTheme:      req.Inputs.LoginTheme,
+			AccountTheme:    req.Inputs.AccountTheme,
+			AdminTheme:      req.Inputs.AdminTheme,
+			EmailTheme:      req.Inputs.EmailTheme,
+		},	
+		State: currentRealm,
 	}, nil
 }
 
-func (r *Realm) Delete(ctx context.Context, req infer.DeleteRequest[RealmState]) (infer.DeleteResponse[RealmState], error) {
-
-	client, token := getClientToken(ctx)
-	err := client.DeleteRealm(ctx, token.AccessToken, req.ID)
+func (r *Realm) Delete(ctx context.Context, req infer.DeleteRequest[RealmState]) (infer.DeleteResponse, error) {
+	client, token, err := getClientToken(ctx)
 	if err != nil {
-		return infer.DeleteResponse[RealmState]{}, err
+		return infer.DeleteResponse{}, err
+	}
+	if err = client.DeleteRealm(ctx, token.AccessToken, req.ID); err != nil {
+		return infer.DeleteResponse{}, err
 	}
 	p.GetLogger(ctx).Info("Realm deleted with ID: " + req.ID)
-
-	return infer.DeleteResponse[RealmState]{}, nil
+	return infer.DeleteResponse{}, nil
 }
 
-func (r *Realm) WireDependecies(f infer.FieldSelector, args *RealmArgs, state *RealmState) {
-	f.OutputField(&state.ID).DependsOnField(&args.Name)
-	f.OutputField(&state.Enabled).DependsOnField(&args.Enabled)
-	f.OutputField(&state.DisplayName).DependsOnField(&args.DisplayName)
-	f.OutputField(&state.DisplayNameHtml).DependsOnField(&args.DisplayNameHtml)
-	f.OutputField(&state.LoginTheme).DependsOnField(&args.LoginTheme)
-	f.OutputField(&state.AccountTheme).DependsOnField(&args.AccountTheme)
-	f.OutputField(&state.AdminTheme).DependsOnField(&args.AdminTheme)
-	f.OutputField(&state.EmailTheme).DependsOnField(&args.EmailTheme)
+// WireDependencies informs the provider of input/output relationships.
+func (r *Realm) WireDependencies(f infer.FieldSelector, args *RealmArgs, state *RealmState) {
+	f.OutputField(&state.Name).DependsOn(f.InputField(&args.Name))
+	f.OutputField(&state.DisplayName).DependsOn(f.InputField(&args.DisplayName))
+	f.OutputField(&state.LoginTheme).DependsOn(f.InputField(&args.LoginTheme))
+	f.OutputField(&state.AccountTheme).DependsOn(f.InputField(&args.AccountTheme))
+	f.OutputField(&state.AdminTheme).DependsOn(f.InputField(&args.AdminTheme))
+	f.OutputField(&state.EmailTheme).DependsOn(f.InputField(&args.EmailTheme))
+}
+
+// deref safely dereferences a *string returning empty string if nil.
+func deref(s *string) string {
+	if s == nil {
+		return ""
+	}
+	return *s
+}
+
+func readRealmState(ctx context.Context, client *gocloak.GoCloak, token, realmName string) (RealmState, error) {
+	realm, err := client.GetRealm(ctx, token, realmName)
+	if err != nil {
+		return RealmState{}, fmt.Errorf("failed to get realm: %w", err)
+	}
+
+	state := RealmState{
+		ID:   *realm.Realm,
+		Name: *realm.Realm,
+	}
+
+	if realm.Enabled != nil {
+		state.Enabled = realm.Enabled
+	}
+
+	if realm.DisplayName != nil {
+		state.DisplayName = realm.DisplayName
+	}
+
+	if realm.DisplayNameHTML != nil {
+		state.DisplayNameHtml = realm.DisplayNameHTML
+	}
+
+	if realm.LoginTheme != nil {
+		state.LoginTheme = realm.LoginTheme
+	}
+
+	if realm.AccountTheme != nil {
+		state.AccountTheme = realm.AccountTheme
+	}
+
+	if realm.AdminTheme != nil {
+		state.AdminTheme = realm.AdminTheme
+	}
+
+	if realm.EmailTheme != nil {
+		state.EmailTheme = realm.EmailTheme
+	}
+
+	return state, nil
 }

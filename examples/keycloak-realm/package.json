@@ -1,0 +1,19 @@
+{
+  "name": "pulumi-qeycloak-example",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "preview": "pulumi preview",
+    "up": "pulumi up",
+    "destroy": "pulumi destroy -y"
+  },
+  "dependencies": {
+    "@pulumi/pulumi": "^3.0.0",
+    "@raushan606/qeycloak": "file:../../sdk/nodejs/bin"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "@types/node": "^18.0.0"
+  }
+}
