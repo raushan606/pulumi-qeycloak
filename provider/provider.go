@@ -10,7 +10,7 @@ import (
 	"github.com/raushan606/pulumi-qeycloak/provider/pkg/qeycloak/realm"
 )
 
-var Version string
+var Version string = "0.0.1"
 
 const Name string = "qeycloak"
 
@@ -35,10 +35,10 @@ func Provider() p.Provider {
 				"qeycloak",
 				"kind/native",
 			},
-			Homepage:          "https://pulumi.com",
-			License:           "Apache-2.0",
-			Repository:        "https://github.com/raushan606/pulumi-qeycloak",
-			Publisher:         "Raushan Kumar",
+			Homepage:   "https://pulumi.com",
+			License:    "Apache-2.0",
+			Repository: "https://github.com/raushan606/pulumi-qeycloak",
+			Publisher:  "Raushan Kumar",
 			// This contains language specific details for generating the provider's SDKs
 			LanguageMap: map[string]any{
 				"nodejs": map[string]any{
