@@ -8,7 +8,8 @@ NUGET_PKG_NAME   := Pulumi.Qeycloak
 
 PROVIDER        := pulumi-resource-${PACK}
 CODEGEN         := pulumi-gen-${PACK}
-VERSION         ?= $(shell pulumictl get version)
+VERSION         := 0.0.1
+# VERSION         ?= $(shell pulumictl get version)
 PROVIDER_PATH   := provider
 VERSION_PATH    := ${PROVIDER_PATH}/pkg/version.Version
 
@@ -40,7 +41,8 @@ test_provider::
 	cd provider/pkg && go test -short -v -count=1 -cover -timeout 2h -parallel ${TESTPARALLELISM} ./...
 
 
-nodejs_sdk:: VERSION := $(shell pulumictl get version --language javascript)
+nodejs_sdk:: VERSION := 0.0.1
+#  VERSION := $(shell pulumictl get version --language javascript) --- IGNORE
 nodejs_sdk::
 	rm -rf sdk/nodejs
 	pulumi package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language nodejs
@@ -53,7 +55,8 @@ nodejs_sdk::
 	@if [ -f ${PACKDIR}/nodejs/package-lock.json ]; then cp ${PACKDIR}/nodejs/package-lock.json ${PACKDIR}/nodejs/bin/; fi
 	sed -i.bak 's/$${VERSION}/$(VERSION)/g' ${PACKDIR}/nodejs/bin/package.json
 
-java_sdk:: PACKAGE_VERSION := $(shell pulumictl get version --language generic)
+java_sdk:: PACKAGE_VERSION := 0.0.1
+#  PACKAGE_VERSION := $(shell pulumictl get version --language generic)
 java_sdk::
 	rm -rf sdk/java
 	pulumi package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language java
@@ -93,6 +96,19 @@ lint::
 install:: install_nodejs_sdk
 	cp $(WORKING_DIR)/bin/${PROVIDER} ${GOPATH}/bin
 
+# Install the provider plugin into Pulumi's local plugin cache for this VERSION
+.PHONY: install_plugin_local
+install_plugin_local:: provider
+	@echo "Installing Pulumi plugin locally for version $(VERSION) ..."
+	@mkdir -p $$HOME/.pulumi/plugins/resource-$(PACK)-v$(VERSION)
+	cp $(WORKING_DIR)/bin/$(PROVIDER) $$HOME/.pulumi/plugins/resource-$(PACK)-v$(VERSION)/
+	@echo "✅ Installed to $$HOME/.pulumi/plugins/resource-$(PACK)-v$(VERSION)/$(PROVIDER)"
+	@echo "Installing $(PROVIDER_BINARY) to /usr/local/bin..."
+	sudo cp $(WORKING_DIR)/bin/$(PROVIDER) /usr/local/bin/
+	@echo "✅ Installed $(PROVIDER_BINARY)"
+
+.PHONY: full-setup
+full-setup: build install build_sdks install_plugin_local
 
 GO_TEST := go test -v -count=1 -cover -timeout 2h -parallel ${TESTPARALLELISM}
 
@@ -106,3 +122,4 @@ install_nodejs_sdk::
 
 test::
 	cd examples && go test -v -tags=all -timeout 2h
+

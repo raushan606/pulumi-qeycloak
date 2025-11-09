@@ -1,5 +1,6 @@
 import * as pulumi from "@pulumi/pulumi";
-import { Provider, Realm } from "@raushan606/qeycloak";
+import { Provider } from "@raushan606/qeycloak";
+import { Realm } from "@raushan606/qeycloak/realm";
 
 // Configuration / assumptions:
 // We assume a local Keycloak instance listening at http://localhost:8080
@@ -9,16 +10,17 @@ import { Provider, Realm } from "@raushan606/qeycloak";
 // Allow overriding via Pulumi config (optional convenience):
 const config = new pulumi.Config();
 const keycloakUrl = config.get("keycloakUrl") || "http://localhost:8080"; // include protocol for clarity
-const username = config.get("keycloakUsername") || "demo-admin";
-const password = config.getSecret("keycloakPassword") || pulumi.secret("demo-password-ChangeMe!");
+const username = config.get("keycloakUsername") || "admin";
+const password = config.getSecret("keycloakPassword") || pulumi.secret("admin");
 
 // Instantiate the provider. Defaults (realm=master, insecure=true, basePath=/) are applied by the provider.
 const keycloakProvider = new Provider("localKeycloak", {
     url: keycloakUrl,
     username: username,
     password: password,
-    // realm: "master", // optional override
-    // insecure: true,  // default true
+    realm: "master",
+    insecure: true,
+    basePath: "/",
 });
 
 // Create a new realm using the provider.
@@ -27,7 +29,7 @@ const demoRealm = new Realm("demoRealm", {
     displayName: "Pulumi Demo Realm",
     displayNameHtml: "<strong>Pulumi Demo Realm</strong>",
     enabled: true,
-    loginTheme: "keycloak",    // assuming default themes
+    loginTheme: "payara",    // assuming default themes
 }, { provider: keycloakProvider });
 
 // Export realm id and name

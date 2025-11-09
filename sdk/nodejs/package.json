@@ -23,7 +23,6 @@
     },
     "pulumi": {
         "resource": true,
-        "name": "qeycloak",
-        "server": "github://api.github.com/raushan606"
+        "name": "qeycloak"
     }
 }

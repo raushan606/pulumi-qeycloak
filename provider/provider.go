@@ -38,7 +38,6 @@ func Provider() p.Provider {
 			Homepage:          "https://pulumi.com",
 			License:           "Apache-2.0",
 			Repository:        "https://github.com/raushan606/pulumi-qeycloak",
-			PluginDownloadURL: "github://api.github.com/raushan606",
 			Publisher:         "Raushan Kumar",
 			// This contains language specific details for generating the provider's SDKs
 			LanguageMap: map[string]any{
