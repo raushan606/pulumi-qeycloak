@@ -2,14 +2,13 @@ module github.com/raushan606/pulumi-qeycloak/provider
 
 go 1.24
 
+toolchain go1.24.4
+
 require (
 	github.com/Nerzal/gocloak/v13 v13.9.0
-	github.com/blang/semver v3.5.1+incompatible
-	github.com/netascode/go-aci v0.1.0
-	github.com/netascode/pulumi-aci/provider v0.0.0-20250113193349-3ea75f9edb16
-	github.com/pulumi/pulumi-go-provider v1.1.2
-	github.com/pulumi/pulumi/sdk/v3 v3.206.0
-	github.com/tidwall/gjson v1.18.0
+	github.com/pulumi/pulumi-go-provider v1.1.0
+	github.com/pulumi/pulumi/sdk/v3 v3.169.0
+	github.com/stretchr/testify v1.10.0
 )
 
 require (
