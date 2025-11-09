@@ -7,75 +7,53 @@
         ],
         "variables": {
             "insecure": {
-                "description": "Allow insecure HTTPS client. This can also be set as the ACI_INSECURE environment variable. Defaults to true.",
-                "type": "boolean"
-            },
-            "logging": {
-                "description": "Enable debug logging. This can also be set as the ACI_LOGGING environment variable. Defaults to false.",
+                "description": "Allow insecure HTTPS client. Defaults to true.",
                 "type": "boolean"
             },
             "password": {
                 "default": "",
-                "defaultInfo": {
-                    "environment": [
-                        "ACI_PASSWORD"
-                    ]
-                },
-                "description": "Password for the APIC Account. This can also be set as the ACI_PASSWORD environment variable.",
-                "secret": true,
+                "description": "Password for the Keycloak Admin Account. Defaults to an empty string.",
                 "type": "string"
-            },
-            "retries": {
-                "description": "Number of retries for REST API calls. This can also be set as the ACI_RETRIES environment variable. Defaults to 3.",
-                "type": "integer"
             },
             "url": {
                 "default": "",
-                "defaultInfo": {
-                    "environment": [
-                        "ACI_URL"
-                    ]
-                },
-                "description": "URL of the Cisco APIC web interface. This can also be set as the ACI_URL environment variable.",
+                "description": "URL of the Keycloak Base. Defaults to an empty string.",
                 "type": "string"
             },
             "username": {
                 "default": "",
-                "defaultInfo": {
-                    "environment": [
-                        "ACI_USERNAME"
-                    ]
-                },
-                "description": "Username for the APIC Account. This can also be set as the ACI_USERNAME environment variable.",
+                "description": "Username for the Keycloak Admin Account. Defaults to an empty string.",
+                "type": "string"
+            },
+            "basePath": {
+                "default": "/",
+                "description": "Base path for Keycloak endpoints. Defaults to /.",
+                "type": "string"
+            },
+            "realm": {
+                "default": "master",
+                "description": "Keycloak realm to use. Defaults to master.",
                 "type": "string"
             }
         }
     },
-    "description": "The Pulumi ACI provider provides resources to interact with a Cisco ACI fabric.",
-    "displayName": "ACI",
+    "description": "The Pulumi Keycloak provider provides resources to interact with a Keycloak instance.",
+    "displayName": "Keycloak",
     "homepage": "https://pulumi.com",
     "keywords": [
         "pulumi",
-        "aci",
-        "networking",
-        "cisco"
+        "keycloak",
+        "provider",
+        "qeycloak",
+        "qube"
     ],
     "language": {
-        "csharp": {
-            "packageReferences": {
-                "Pulumi": "3.*"
-            }
-        },
-        "go": {
-            "generateResourceContainerTypes": true,
-            "importBasePath": "github.com/netascode/pulumi-aci/sdk/go/aci"
-        },
         "java": {
             "buildFiles": "gradle",
             "dependencies": {
-                "com.google.code.findbugs:jsr305": "3.0.2",
-                "com.google.code.gson:gson": "2.8.9",
-                "com.pulumi:pulumi": "0.6.0"
+                        "com.pulumi:pulumi":               "1.16.3",
+						"com.google.code.gson:gson":       "2.13.2",
+						"com.google.code.findbugs:jsr305": "3.0.2"
             },
             "gradleNexusPublishPluginVersion": "1.1.0"
         },
@@ -83,106 +61,72 @@
             "dependencies": {
                 "@pulumi/pulumi": "^3.0.0"
             },
-            "packageName": "@netascode/aci"
-        },
-        "python": {
-            "requires": {
-                "pulumi": ">=3.0.0,<4.0.0"
-            }
+            "packageName": "@raushan606/qeycloak"
         }
     },
-    "license": "MPL-2.0",
-    "logoUrl": "https://raw.githubusercontent.com/netascode/pulumi-aci/master/assets/logo.png",
-    "name": "aci",
-    "pluginDownloadURL": "github://api.github.com/netascode",
+    "license": "Apache-2.0",
+    "name": "qeycloak",
+    "pluginDownloadURL": "github://api.github.com/raushan606",
     "provider": {
         "inputProperties": {
             "insecure": {
-                "description": "Allow insecure HTTPS client. This can also be set as the ACI_INSECURE environment variable. Defaults to true.",
-                "type": "boolean"
-            },
-            "logging": {
-                "description": "Enable debug logging. This can also be set as the ACI_LOGGING environment variable. Defaults to false.",
+                "description": "Allow insecure HTTPS client. Defaults to true.",
                 "type": "boolean"
             },
             "password": {
                 "default": "",
-                "defaultInfo": {
-                    "environment": [
-                        "ACI_PASSWORD"
-                    ]
-                },
-                "description": "Password for the APIC Account. This can also be set as the ACI_PASSWORD environment variable.",
-                "secret": true,
+                "description": "Password for the Keycloak Admin Account. Defaults to an empty string.",
                 "type": "string"
-            },
-            "retries": {
-                "description": "Number of retries for REST API calls. This can also be set as the ACI_RETRIES environment variable. Defaults to 3.",
-                "type": "integer"
             },
             "url": {
                 "default": "",
-                "defaultInfo": {
-                    "environment": [
-                        "ACI_URL"
-                    ]
-                },
-                "description": "URL of the Cisco APIC web interface. This can also be set as the ACI_URL environment variable.",
+                "description": "URL of the Keycloak Base. Defaults to an empty string.",
                 "type": "string"
             },
             "username": {
                 "default": "",
-                "defaultInfo": {
-                    "environment": [
-                        "ACI_USERNAME"
-                    ]
-                },
-                "description": "Username for the APIC Account. This can also be set as the ACI_USERNAME environment variable.",
+                "description": "Username for the Keycloak Admin Account. Defaults to an empty string.",
+                "type": "string"
+            },
+            "basePath": {
+                "default": "/",
+                "description": "Base path for Keycloak endpoints. Defaults to /.",
+                "type": "string"
+            },
+            "realm": {
+                "default": "master",
+                "description": "Keycloak realm to use. Defaults to master.",
                 "type": "string"
             }
         },
         "properties": {
-            "insecure": {
-                "description": "Allow insecure HTTPS client. This can also be set as the ACI_INSECURE environment variable. Defaults to true.",
-                "type": "boolean"
-            },
-            "logging": {
-                "description": "Enable debug logging. This can also be set as the ACI_LOGGING environment variable. Defaults to false.",
+           "insecure": {
+                "description": "Allow insecure HTTPS client. Defaults to true.",
                 "type": "boolean"
             },
             "password": {
                 "default": "",
-                "defaultInfo": {
-                    "environment": [
-                        "ACI_PASSWORD"
-                    ]
-                },
-                "description": "Password for the APIC Account. This can also be set as the ACI_PASSWORD environment variable.",
-                "secret": true,
+                "description": "Password for the Keycloak Admin Account. Defaults to an empty string.",
                 "type": "string"
-            },
-            "retries": {
-                "description": "Number of retries for REST API calls. This can also be set as the ACI_RETRIES environment variable. Defaults to 3.",
-                "type": "integer"
             },
             "url": {
                 "default": "",
-                "defaultInfo": {
-                    "environment": [
-                        "ACI_URL"
-                    ]
-                },
-                "description": "URL of the Cisco APIC web interface. This can also be set as the ACI_URL environment variable.",
+                "description": "URL of the Keycloak Base. Defaults to an empty string.",
                 "type": "string"
             },
             "username": {
                 "default": "",
-                "defaultInfo": {
-                    "environment": [
-                        "ACI_USERNAME"
-                    ]
-                },
-                "description": "Username for the APIC Account. This can also be set as the ACI_USERNAME environment variable.",
+                "description": "Username for the Keycloak Admin Account. Defaults to an empty string.",
+                "type": "string"
+            },
+            "basePath": {
+                "default": "/",
+                "description": "Base path for Keycloak endpoints. Defaults to /.",
+                "type": "string"
+            },
+            "realm": {
+                "default": "master",
+                "description": "Keycloak realm to use. Defaults to master.",
                 "type": "string"
             }
         },
@@ -197,92 +141,132 @@
             "password"
         ]
     },
-    "publisher": "Cisco",
-    "repository": "https://github.com/netascode/pulumi-aci",
+    "publisher": "Raushan Kumar",
+    "repository": "https://github.com/raushan606/pulumi-qeycloak",
     "resources": {
-        "aci:apic:Rest": {
-            "description": "Manages ACI Model Objects via REST API calls. This resource can only manage a single API object.",
+        "qeycloak:realm:Realm": {
+            "description": "Manages Keycloak Realm via REST API calls. This resource can only manage a single API object.",
             "inputProperties": {
-                "children": {
-                    "description": "List of child objects to be created. Each child object must have a unique relative name.",
-                    "items": {
-                        "$ref": "#/types/aci:apic:Child"
-                    },
-                    "type": "array"
-                },
-                "class_name": {
-                    "description": "Which class object is being created. (Make sure there is no colon in the classname)",
+                "name": {
+                    "description": "The name of the realm.",
                     "type": "string"
                 },
-                "content": {
-                    "additionalProperties": {
-                        "type": "string"
-                    },
-                    "description": "Map of key-value pairs those needed to be passed to the Model object as parameters. Make sure the key name matches the name with the object parameter in ACI.",
-                    "type": "object"
+                "enabled": {
+                    "description": "Whether the realm is enabled.",
+                    "type": "boolean"
                 },
-                "dn": {
-                    "description": "Distinguished name of object being managed including its relative name, e.g. uni/tn-EXAMPLE_TENANT.",
+                "displayName": {
+                    "description": "Display name for the realm.",
                     "type": "string"
+                },
+                "displayNameHtml": {
+                    "description": "HTML display name for the realm.",
+                    "type": "string"
+                },
+                "loginTheme": {
+                    "description": "Login theme for the realm.",
+                    "type": "string"
+                },
+                "accountTheme": {
+                    "description": "Account theme for the realm.",
+                    "type": "string"
+                },
+                "adminTheme": {
+                    "description": "Admin theme for the realm.",
+                    "type": "string"
+                },
+                "emailTheme": {
+                    "description": "Email theme for the realm.",
+                    "type": "string"
+                },
+                "smtpServer": {
+                    "description": "SMTP server configuration for the realm.",
+                    "$ref": "#/types/qeycloak:realm:SmtpServerConfig"
                 }
             },
             "properties": {
-                "children": {
-                    "description": "List of child objects to be created. Each child object must have a unique relative name.",
-                    "items": {
-                        "$ref": "#/types/aci:apic:Child"
-                    },
-                    "type": "array"
-                },
-                "class_name": {
-                    "description": "Which class object is being created. (Make sure there is no colon in the classname)",
+                "name": {
+                    "description": "The name of the realm.",
                     "type": "string"
                 },
-                "content": {
-                    "additionalProperties": {
-                        "type": "string"
-                    },
-                    "description": "Map of key-value pairs those needed to be passed to the Model object as parameters. Make sure the key name matches the name with the object parameter in ACI.",
-                    "type": "object"
+                "enabled": {
+                    "description": "Whether the realm is enabled.",
+                    "type": "boolean"
                 },
-                "dn": {
-                    "description": "Distinguished name of object being managed including its relative name, e.g. uni/tn-EXAMPLE_TENANT.",
+                "displayName": {
+                    "description": "Display name for the realm.",
                     "type": "string"
+                },
+                "displayNameHtml": {
+                    "description": "HTML display name for the realm.",
+                    "type": "string"
+                },
+                "loginTheme": {
+                    "description": "Login theme for the realm.",
+                    "type": "string"
+                },
+                "accountTheme": {
+                    "description": "Account theme for the realm.",
+                    "type": "string"
+                },
+                "adminTheme": {
+                    "description": "Admin theme for the realm.",
+                    "type": "string"
+                },
+                "emailTheme": {
+                    "description": "Email theme for the realm.",
+                    "type": "string"
+                },
+                "smtpServer": {
+                    "description": "SMTP server configuration for the realm.",
+                    "$ref": "#/types/qeycloak:realm:SmtpServerConfig"
                 }
             },
             "required": [
-                "dn",
-                "class_name"
+                "name"
             ],
             "requiredInputs": [
-                "dn",
-                "class_name"
+                "name"
             ]
         }
     },
     "types": {
-        "aci:apic:Child": {
+        "qeycloak:realm:SmtpServerConfig": {
+            "description": "SMTP server configuration for Keycloak realm.",
             "properties": {
-                "class_name": {
-                    "description": "Which class object is being created. (Make sure there is no colon in the classname)",
+                "host": {
+                    "description": "SMTP server host.",
                     "type": "string"
                 },
-                "content": {
-                    "additionalProperties": {
-                        "type": "string"
-                    },
-                    "description": "Map of key-value pairs those needed to be passed to the Model object as parameters. Make sure the key name matches the name with the object parameter in ACI.",
-                    "type": "object"
+                "port": {
+                    "description": "SMTP server port.",
+                    "type": "integer"
                 },
-                "rn": {
-                    "description": "Relative name of child object.",
+                "from": {
+                    "description": "From email address.",
+                    "type": "string"
+                },
+                "fromName": {
+                    "description": "From display name.",
+                    "type": "string"
+                },
+                "startTls": {
+                    "description": "Enable STARTTLS.",
+                    "type": "boolean"
+                },
+                "auth": {
+                    "description": "Enable SMTP authentication.",
+                    "type": "boolean"
+                },
+                "username": {
+                    "description": "SMTP username.",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "SMTP password.",
                     "type": "string"
                 }
             },
-            "required": [
-                "rn",
-                "class_name"
-            ],
             "type": "object"
         }
     }
