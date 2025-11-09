@@ -1,14 +1,13 @@
 module github.com/raushan606/pulumi-qeycloak/provider
 
-go 1.23.11
+go 1.24
 
 require (
 	github.com/Nerzal/gocloak/v13 v13.9.0
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/netascode/go-aci v0.1.0
 	github.com/netascode/pulumi-aci/provider v0.0.0-20250113193349-3ea75f9edb16
-	github.com/pulumi/pulumi-go-provider v0.14.0
-	github.com/pulumi/pulumi-go-provider/integration v0.10.0
+	github.com/pulumi/pulumi-go-provider v1.1.2
 	github.com/pulumi/pulumi/sdk/v3 v3.206.0
 	github.com/tidwall/gjson v1.18.0
 )
@@ -31,7 +30,6 @@ require (
 	github.com/cloudflare/circl v1.6.1 // indirect
 	github.com/containerd/console v1.0.4-0.20230313162750-1ae8d489ac81 // indirect
 	github.com/cyphar/filepath-securejoin v0.3.6 // indirect
-	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/djherbis/times v1.5.0 // indirect
 	github.com/edsrzf/mmap-go v1.1.0 // indirect
 	github.com/emirpasic/gods v1.18.1 // indirect
@@ -69,10 +67,9 @@ require (
 	github.com/pjbgf/sha1cd v0.3.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pkg/term v1.1.0 // indirect
-	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/pulumi/appdash v0.0.0-20231130102222-75f619a67231 // indirect
 	github.com/pulumi/esc v0.17.0 // indirect
-	github.com/pulumi/pulumi/pkg/v3 v3.154.0 // indirect
+	github.com/pulumi/pulumi/pkg/v3 v3.169.0 // indirect
 	github.com/rivo/uniseg v0.4.4 // indirect
 	github.com/rogpeppe/go-internal v1.12.0 // indirect
 	github.com/santhosh-tekuri/jsonschema/v5 v5.0.0 // indirect
@@ -83,7 +80,7 @@ require (
 	github.com/skeema/knownhosts v1.3.0 // indirect
 	github.com/spf13/cobra v1.8.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/stretchr/testify v1.10.0 // indirect
+	github.com/stretchr/objx v0.5.2 // indirect
 	github.com/texttheater/golang-levenshtein v1.0.1 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
