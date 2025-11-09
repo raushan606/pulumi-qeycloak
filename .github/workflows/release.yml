@@ -5,7 +5,7 @@ on:
       - v*.*.*
       - '!v*.*.*-**'
 env:
-  PROVIDER: "aci"
+  PROVIDER: "qeycloak"
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -14,9 +14,6 @@ env:
   NUGET_PUBLISH_KEY: ${{ secrets.NUGET_PUBLISH_KEY }}
   NUGET_FEED_URL: https://api.nuget.org/v3/index.json
   PUBLISH_NUGET: true
-  PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-  PYPI_USERNAME: "__token__"
-  PUBLISH_PYPI: true
 jobs:
   publish_binary:
     name: publish
@@ -68,14 +65,6 @@ jobs:
         with:
           node-version: ${{matrix.nodeversion}}
           registry-url: ${{env.NPM_REGISTRY_URL}}
-      - name: Setup DotNet
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: ${{matrix.dotnetversion}}
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{matrix.pythonversion}}
       - name: Generate SDK
         run: make ${{ matrix.language }}_sdk
       - name: Check worktree clean
@@ -94,37 +83,19 @@ jobs:
         with:
           name: ${{ matrix.language  }}-sdk.tar.gz
           path: ${{ github.workspace}}/sdk/${{ matrix.language }}.tar.gz
-      - if: ${{ matrix.language == 'python' && env.PUBLISH_PYPI == 'true' }}
-        name: Publish package to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          user: ${{ env.PYPI_USERNAME }}
-          password: ${{ env.PYPI_PASSWORD }}
-          packages-dir: ${{github.workspace}}/sdk/python/bin/dist
       - if: ${{ matrix.language == 'nodejs' && env.PUBLISH_NPM == 'true' }}
         uses: JS-DevTools/npm-publish@v3
         with:
           access: "public"
           token: ${{ env.NPM_TOKEN }}
           package: ${{github.workspace}}/sdk/nodejs/bin/package.json
-      - if: ${{ matrix.language == 'dotnet' && env.PUBLISH_NUGET == 'true' }}
-        name: publish nuget package
-        run: |
-          dotnet nuget push ${{github.workspace}}/sdk/dotnet/bin/Debug/*.nupkg -s ${{ env.NUGET_FEED_URL }} -k ${{ env.NUGET_PUBLISH_KEY }}
-          echo "done publishing packages"
     strategy:
       fail-fast: true
       matrix:
-        dotnetversion:
-          - 6.0.x
         goversion:
           - 1.20.x
         language:
           - nodejs
-          - python
-          - dotnet
           - go
         nodeversion:
           - 14.x
-        pythonversion:
-          - "3.9"
