@@ -6,9 +6,10 @@ toolchain go1.24.4
 
 require (
 	github.com/Nerzal/gocloak/v13 v13.9.0
+	github.com/blang/semver v3.5.1+incompatible
+	github.com/netascode/go-aci v0.1.0
 	github.com/pulumi/pulumi-go-provider v1.1.0
-	github.com/pulumi/pulumi/sdk/v3 v3.169.0
-	github.com/stretchr/testify v1.10.0
+	github.com/tidwall/gjson v1.16.0
 )
 
 require (
@@ -72,8 +73,10 @@ require (
 	github.com/pulumi/appdash v0.0.0-20231130102222-75f619a67231 // indirect
 	github.com/pulumi/esc v0.17.0 // indirect
 	github.com/pulumi/pulumi/pkg/v3 v3.169.0 // indirect
+	github.com/pulumi/pulumi/sdk/v3 v3.169.0 // indirect
 	github.com/rivo/uniseg v0.4.4 // indirect
 	github.com/rogpeppe/go-internal v1.12.0 // indirect
+	github.com/sabhiram/go-gitignore v0.0.0-20210923224102-525f6e181f06 // indirect
 	github.com/santhosh-tekuri/jsonschema/v5 v5.0.0 // indirect
 	github.com/segmentio/asm v1.1.3 // indirect
 	github.com/segmentio/encoding v0.3.5 // indirect
