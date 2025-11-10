@@ -19,8 +19,7 @@ func Provider() p.Provider {
 		Resources: []infer.InferredResource{
 			infer.Resource(&realm.Realm{}),
 		},
-		Components: []infer.InferredComponent{},
-		Config:     infer.Config(&config.KeycloakConfig{}),
+		Config: infer.Config(&config.KeycloakConfig{}),
 		ModuleMap: map[tokens.ModuleName]tokens.ModuleName{
 			"provider": "index",
 		},

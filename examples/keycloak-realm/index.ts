@@ -13,8 +13,6 @@ const keycloakProvider = new Provider("localKeycloak", {
     username: username,
     password: password.apply(pwd => pwd),
     realm: "master",
-    insecure: true,
-    basePath: "/",
 });
 
 const demoRealm = new Realm("qube-realm", {

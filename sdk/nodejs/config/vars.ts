@@ -8,34 +8,12 @@ declare var exports: any;
 const __config = new pulumi.Config("qeycloak");
 
 /**
- * Base path for the Keycloak API. Defaults to '/'.
- */
-export declare const basePath: string;
-Object.defineProperty(exports, "basePath", {
-    get() {
-        return __config.get("basePath") ?? "/";
-    },
-    enumerable: true,
-});
-
-/**
- * Allow insecure HTTPS client. Defaults to true.
- */
-export declare const insecure: boolean;
-Object.defineProperty(exports, "insecure", {
-    get() {
-        return __config.getObject<boolean>("insecure") ?? true;
-    },
-    enumerable: true,
-});
-
-/**
  * Password for the Keycloak Account.
  */
-export declare const password: string;
+export declare const password: string | undefined;
 Object.defineProperty(exports, "password", {
     get() {
-        return __config.get("password") ?? "";
+        return __config.get("password");
     },
     enumerable: true,
 });
@@ -43,10 +21,10 @@ Object.defineProperty(exports, "password", {
 /**
  * Keycloak realm. Defaults to 'master'.
  */
-export declare const realm: string;
+export declare const realm: string | undefined;
 Object.defineProperty(exports, "realm", {
     get() {
-        return __config.get("realm") ?? "master";
+        return __config.get("realm");
     },
     enumerable: true,
 });
@@ -54,10 +32,10 @@ Object.defineProperty(exports, "realm", {
 /**
  * URL of the Keycloak Server.
  */
-export declare const url: string;
+export declare const url: string | undefined;
 Object.defineProperty(exports, "url", {
     get() {
-        return __config.get("url") ?? "localhost:8080";
+        return __config.get("url");
     },
     enumerable: true,
 });
@@ -65,10 +43,10 @@ Object.defineProperty(exports, "url", {
 /**
  * Username for the Keycloak Account.
  */
-export declare const username: string;
+export declare const username: string | undefined;
 Object.defineProperty(exports, "username", {
     get() {
-        return __config.get("username") ?? "admin";
+        return __config.get("username");
     },
     enumerable: true,
 });

@@ -4,7 +4,6 @@
 package com.pulumi.qeycloak;
 
 import com.pulumi.core.internal.Codegen;
-import java.lang.Boolean;
 import java.lang.String;
 import java.util.Optional;
 
@@ -12,45 +11,31 @@ public final class Config {
 
     private static final com.pulumi.Config config = com.pulumi.Config.of("qeycloak");
 /**
- * Base path for the Keycloak API. Defaults to &#39;/&#39;.
- * 
- */
-    public Optional<String> basePath() {
-        return Codegen.stringProp("basePath").config(config).def("/").get();
-    }
-/**
- * Allow insecure HTTPS client. Defaults to true.
- * 
- */
-    public Optional<Boolean> insecure() {
-        return Codegen.booleanProp("insecure").config(config).def(true).get();
-    }
-/**
  * Password for the Keycloak Account.
  * 
  */
     public String password() {
-        return Codegen.stringProp("password").config(config).def("").require();
+        return Codegen.stringProp("password").config(config).require();
     }
 /**
  * Keycloak realm. Defaults to &#39;master&#39;.
  * 
  */
     public Optional<String> realm() {
-        return Codegen.stringProp("realm").config(config).def("master").get();
+        return Codegen.stringProp("realm").config(config).get();
     }
 /**
  * URL of the Keycloak Server.
  * 
  */
     public String url() {
-        return Codegen.stringProp("url").config(config).def("localhost:8080").require();
+        return Codegen.stringProp("url").config(config).require();
     }
 /**
  * Username for the Keycloak Account.
  * 
  */
     public String username() {
-        return Codegen.stringProp("username").config(config).def("admin").require();
+        return Codegen.stringProp("username").config(config).require();
     }
 }

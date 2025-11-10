@@ -1,0 +1,8 @@
+com/pulumi/qeycloak/ProviderArgs$Builder.class
+com/pulumi/qeycloak/realm/RealmArgs.class
+com/pulumi/qeycloak/realm/Realm.class
+com/pulumi/qeycloak/Config.class
+com/pulumi/qeycloak/Utilities.class
+com/pulumi/qeycloak/ProviderArgs.class
+com/pulumi/qeycloak/Provider.class
+com/pulumi/qeycloak/realm/RealmArgs$Builder.class

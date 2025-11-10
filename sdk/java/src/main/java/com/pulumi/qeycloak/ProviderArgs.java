@@ -5,9 +5,7 @@ package com.pulumi.qeycloak;
 
 import com.pulumi.core.Output;
 import com.pulumi.core.annotations.Import;
-import com.pulumi.core.internal.Codegen;
 import com.pulumi.exceptions.MissingRequiredPropertyException;
-import java.lang.Boolean;
 import java.lang.String;
 import java.util.Objects;
 import java.util.Optional;
@@ -17,36 +15,6 @@ import javax.annotation.Nullable;
 public final class ProviderArgs extends com.pulumi.resources.ResourceArgs {
 
     public static final ProviderArgs Empty = new ProviderArgs();
-
-    /**
-     * Base path for the Keycloak API. Defaults to &#39;/&#39;.
-     * 
-     */
-    @Import(name="basePath")
-    private @Nullable Output<String> basePath;
-
-    /**
-     * @return Base path for the Keycloak API. Defaults to &#39;/&#39;.
-     * 
-     */
-    public Optional<Output<String>> basePath() {
-        return Optional.ofNullable(this.basePath);
-    }
-
-    /**
-     * Allow insecure HTTPS client. Defaults to true.
-     * 
-     */
-    @Import(name="insecure", json=true)
-    private @Nullable Output<Boolean> insecure;
-
-    /**
-     * @return Allow insecure HTTPS client. Defaults to true.
-     * 
-     */
-    public Optional<Output<Boolean>> insecure() {
-        return Optional.ofNullable(this.insecure);
-    }
 
     /**
      * Password for the Keycloak Account.
@@ -111,8 +79,6 @@ public final class ProviderArgs extends com.pulumi.resources.ResourceArgs {
     private ProviderArgs() {}
 
     private ProviderArgs(ProviderArgs $) {
-        this.basePath = $.basePath;
-        this.insecure = $.insecure;
         this.password = $.password;
         this.realm = $.realm;
         this.url = $.url;
@@ -135,48 +101,6 @@ public final class ProviderArgs extends com.pulumi.resources.ResourceArgs {
 
         public Builder(ProviderArgs defaults) {
             $ = new ProviderArgs(Objects.requireNonNull(defaults));
-        }
-
-        /**
-         * @param basePath Base path for the Keycloak API. Defaults to &#39;/&#39;.
-         * 
-         * @return builder
-         * 
-         */
-        public Builder basePath(@Nullable Output<String> basePath) {
-            $.basePath = basePath;
-            return this;
-        }
-
-        /**
-         * @param basePath Base path for the Keycloak API. Defaults to &#39;/&#39;.
-         * 
-         * @return builder
-         * 
-         */
-        public Builder basePath(String basePath) {
-            return basePath(Output.of(basePath));
-        }
-
-        /**
-         * @param insecure Allow insecure HTTPS client. Defaults to true.
-         * 
-         * @return builder
-         * 
-         */
-        public Builder insecure(@Nullable Output<Boolean> insecure) {
-            $.insecure = insecure;
-            return this;
-        }
-
-        /**
-         * @param insecure Allow insecure HTTPS client. Defaults to true.
-         * 
-         * @return builder
-         * 
-         */
-        public Builder insecure(Boolean insecure) {
-            return insecure(Output.of(insecure));
         }
 
         /**
@@ -264,12 +188,15 @@ public final class ProviderArgs extends com.pulumi.resources.ResourceArgs {
         }
 
         public ProviderArgs build() {
-            $.basePath = Codegen.stringProp("basePath").output().arg($.basePath).def("/").getNullable();
-            $.insecure = Codegen.booleanProp("insecure").output().arg($.insecure).def(true).getNullable();
-            $.password = Codegen.stringProp("password").secret().arg($.password).def("").require();
-            $.realm = Codegen.stringProp("realm").output().arg($.realm).def("master").getNullable();
-            $.url = Codegen.stringProp("url").output().arg($.url).def("localhost:8080").require();
-            $.username = Codegen.stringProp("username").output().arg($.username).def("admin").require();
+            if ($.password == null) {
+                throw new MissingRequiredPropertyException("ProviderArgs", "password");
+            }
+            if ($.url == null) {
+                throw new MissingRequiredPropertyException("ProviderArgs", "url");
+            }
+            if ($.username == null) {
+                throw new MissingRequiredPropertyException("ProviderArgs", "username");
+            }
             return $;
         }
     }

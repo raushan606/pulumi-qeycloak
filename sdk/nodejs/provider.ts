@@ -20,10 +20,6 @@ export class Provider extends pulumi.ProviderResource {
     }
 
     /**
-     * Base path for the Keycloak API. Defaults to '/'.
-     */
-    declare public readonly basePath: pulumi.Output<string | undefined>;
-    /**
      * Password for the Keycloak Account.
      */
     declare public readonly password: pulumi.Output<string>;
@@ -60,12 +56,10 @@ export class Provider extends pulumi.ProviderResource {
             if (args?.username === undefined && !opts.urn) {
                 throw new Error("Missing required property 'username'");
             }
-            resourceInputs["basePath"] = (args?.basePath) ?? "/";
-            resourceInputs["insecure"] = pulumi.output((args?.insecure) ?? true).apply(JSON.stringify);
-            resourceInputs["password"] = (args?.password ? pulumi.secret(args.password) : undefined) ?? "";
-            resourceInputs["realm"] = (args?.realm) ?? "master";
-            resourceInputs["url"] = (args?.url) ?? "localhost:8080";
-            resourceInputs["username"] = (args?.username) ?? "admin";
+            resourceInputs["password"] = args?.password ? pulumi.secret(args.password) : undefined;
+            resourceInputs["realm"] = args?.realm;
+            resourceInputs["url"] = args?.url;
+            resourceInputs["username"] = args?.username;
         }
         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
         const secretOpts = { additionalSecretOutputs: ["password"] };
@@ -78,14 +72,6 @@ export class Provider extends pulumi.ProviderResource {
  * The set of arguments for constructing a Provider resource.
  */
 export interface ProviderArgs {
-    /**
-     * Base path for the Keycloak API. Defaults to '/'.
-     */
-    basePath?: pulumi.Input<string>;
-    /**
-     * Allow insecure HTTPS client. Defaults to true.
-     */
-    insecure?: pulumi.Input<boolean>;
     /**
      * Password for the Keycloak Account.
      */

@@ -17,20 +17,6 @@ import javax.annotation.Nullable;
 @ResourceType(type="pulumi:providers:qeycloak")
 public class Provider extends com.pulumi.resources.ProviderResource {
     /**
-     * Base path for the Keycloak API. Defaults to &#39;/&#39;.
-     * 
-     */
-    @Export(name="basePath", refs={String.class}, tree="[0]")
-    private Output</* @Nullable */ String> basePath;
-
-    /**
-     * @return Base path for the Keycloak API. Defaults to &#39;/&#39;.
-     * 
-     */
-    public Output<Optional<String>> basePath() {
-        return Codegen.optional(this.basePath);
-    }
-    /**
      * Password for the Keycloak Account.
      * 
      */
