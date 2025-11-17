@@ -6,7 +6,7 @@ toolchain go1.24.4
 
 require (
 	github.com/Nerzal/gocloak/v13 v13.9.0
-	github.com/pulumi/pulumi-go-provider v1.1.3-0.20251107135932-8714ac7269e6
+	github.com/pulumi/pulumi-go-provider v1.2.0
 	github.com/pulumi/pulumi/sdk/v3 v3.169.0
 )
 
